@@ -1,36 +1,54 @@
 <header>
   <h1>URL shorter by TinyURL</h1>
 </header>
+
 <section class="container">
   <form
     #urlForm="ngForm"
     (ngSubmit)="onSubmitUrlForm(urlForm)"
+    novalidate
     autocomplete="off"
+    *ngIf="!isFormSubmited"
   >
     <input
       type="url"
       name="inputUrl"
       class="form-input"
+      required
+      [(ngModel)]="model.inputUrl"
+      #inputUrl="ngModel"
       placeholder="Paste your URL here"
     />
-    <div class="form-error"><p>Please Enter URL</p></div>
-    <button type="submit" class="form-btn">Shorter URL</button>
-
-    <div class="short-url-div">
-      <h2>
-        Generate URL Link
-      </h2>
-      <div>
-        <p>
-          <a href="" target="_blank" title="Click Me">URL link</a>
-        </p>
-
-      </div>
-      <div class="short-url-btn-div">
-        
-        <button>Copy</button>
-        <button>Reset</button>
-      </div>
+    <div
+      class="form-error"
+      [hidden]="(inputUrl.valid || inputUrl.pristine) && inputUrl.errors"
+    >
+      <p *ngIf="inputUrl.errors && inputUrl.errors">Please Enter URL</p>
     </div>
+
+    <button type="submit" [disabled]="urlForm.invalid" class="form-btn">
+      {{ !isLoading ? "Generate URL" : "Generating..." }}
+    </button>
   </form>
+  <div class="short-url-div"  *ngIf="isFormSubmited">
+    <h2>Generated URL</h2>
+    <div>
+      <p>
+        <a
+          [href]="shortUrl"
+          #shortUrlElementRef
+          target="_blank"
+          title="Click Me"
+          >{{ shortUrl }}</a
+        >
+      </p>
+    </div>
+    <div class="short-url-btn-div">
+      <button (click)="copyUrl(shortUrlElementRef)">
+        {{ !isTextCopied ? "Copy" : "Copied" }}
+      </button>
+      
+      <button (click)="reset()">Reset</button>
+    </div>
+  </div>
 </section>

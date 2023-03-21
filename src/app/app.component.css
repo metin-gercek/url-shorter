@@ -73,3 +73,18 @@ header {
     color: white;
     border-radius: 10px;
 }
+
+@media only screen and (max-width: 600px) {
+    .form-input {
+        width: 92%;
+        background-color: transparent;
+    }
+
+    .form-btn {
+        width: 100%;
+    }
+
+    .short-url-btn-div {
+        width: 100%;
+    }
+}
